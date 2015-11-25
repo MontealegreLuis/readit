@@ -1,5 +1,6 @@
+formatter.name: pretty
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
-        src_path: app
+        namespace: CodeUp
+        psr4_prefix: CodeUp
+        src_path: src
