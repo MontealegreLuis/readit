@@ -8,6 +8,7 @@ namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\AlreadyVotedForLink;
 use CodeUp\ReadIt\Links\Link;
+use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\VotedLinks;
 use PhpSpec\ObjectBehavior;
 
@@ -32,9 +33,15 @@ class ReaditorSpec extends ObjectBehavior
         $link->downvote()->shouldHaveBeenCalled();
     }
 
-    function it_cannot_vote_twice_for_the_same_link(VotedLinks $votedLinks)
-    {
-        $link = Link::post('http://www.montealegreluis.com', 'My blog');
+    function it_cannot_vote_twice_for_the_same_link(
+        VotedLinks $votedLinks,
+        Readitor $readitor
+    ) {
+        $link = Link::post(
+            'http://www.montealegreluis.com',
+            'My blog',
+            $readitor->getWrappedObject()
+        );
         $votedLinks->contains(null)->willReturn(true);
 
         $this->shouldThrow(AlreadyVotedForLink::class)->duringUpvoteLink($link);
