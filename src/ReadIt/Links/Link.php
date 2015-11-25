@@ -6,6 +6,8 @@
  */
 namespace CodeUp\ReadIt\Links;
 
+use Assert\Assertion;
+
 /**
  * A Readitor can post links to the site. Links can be upvoted and downvoted by
  * other Readitors.
@@ -25,13 +27,14 @@ class Link
     /** @var int */
     private $votes;
 
-    /** @var DateTime */
-    private $decayedSince;
-
+    /**
+     * @param string $url
+     * @param string $title
+     */
     private function __construct($url, $title)
     {
-        $this->url = $url;
-        $this->title = $title;
+        $this->setUrl($url);
+        $this->setTitle($title);
         $this->votes = 0;
     }
 
@@ -71,5 +74,24 @@ class Link
             'url' => $this->url,
             'votes' => $this->votes,
         ]);
+    }
+
+    /**
+     * @param string $url
+     */
+    private function setUrl($url)
+    {
+        Assertion::url($url);
+        $this->url = $url;
+    }
+
+    /**
+     * @param string $title
+     */
+    private function setTitle($title)
+    {
+        Assertion::string($title);
+        Assertion::notEmpty($title);
+        $this->title = $title;
     }
 }

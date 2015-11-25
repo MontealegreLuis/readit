@@ -6,12 +6,36 @@
  */
 namespace spec\CodeUp\ReadIt\Links;
 
+use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class LinkSpec extends ObjectBehavior
 {
-    function it_should_allow_adding_a_vote()
+    function it_should_only_allow_http_uris()
+    {
+        $this->beConstructedThrough('post', [
+            'ftp://www.montealegreluis.com',
+            'My blog'
+        ]);
+        $this
+            ->shouldThrow(InvalidArgumentException::class)
+            ->duringInstantiation()
+        ;
+    }
+
+    function it_should_not_allow_empty_titles()
+    {
+        $this->beConstructedThrough('post', [
+            'http://www.montealegreluis.com',
+            ''
+        ]);
+        $this
+            ->shouldThrow(InvalidArgumentException::class)
+            ->duringInstantiation()
+        ;
+    }
+
+    function it_should_allow_adding_votes()
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
@@ -22,7 +46,7 @@ class LinkSpec extends ObjectBehavior
         $this->information()->votes()->shouldBe(2);
     }
 
-    function it_should_allow_subtracting_a_vote()
+    function it_should_allow_subtracting_votes()
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',

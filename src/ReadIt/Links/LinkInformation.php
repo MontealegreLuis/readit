@@ -6,6 +6,8 @@
  */
 namespace CodeUp\ReadIt\Links;
 
+use League\Uri\Schemes\Http as HttpUri;
+
 /**
  * Contains the information of a shared Link
  */
@@ -14,7 +16,7 @@ class LinkInformation
     /** @var string */
     private $title;
 
-    /** @var string */
+    /** @var HttpUri */
     private $url;
 
     /** @var int */
@@ -26,7 +28,7 @@ class LinkInformation
     public function __construct(array $information)
     {
         isset($information['title']) && $this->title = $information['title'];
-        isset($information['url']) && $this->url = $information['url'];
+        isset($information['url']) && $this->url = HttpUri::createFromString($information['url']);
         isset($information['votes']) && $this->votes = $information['votes'];
     }
 
@@ -47,7 +49,7 @@ class LinkInformation
     }
 
     /**
-     * @return string The URL for this link
+     * @return HttpUri The URL for this link
      */
     public function url()
     {

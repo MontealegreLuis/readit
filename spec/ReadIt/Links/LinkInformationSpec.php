@@ -6,8 +6,8 @@
  */
 namespace spec\CodeUp\ReadIt\Links;
 
+use League\Uri\Schemes\Http as HttpUri;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class LinkInformationSpec extends ObjectBehavior
 {
@@ -27,8 +27,11 @@ class LinkInformationSpec extends ObjectBehavior
 
     function it_should_know_its_url()
     {
-        $this->beConstructedWith(['url' => 'http://www.montealegreluis.com']);
+        $this->beConstructedWith([
+            'url' => 'http://www.montealegreluis.com'
+        ]);
 
-        $this->url()->shouldBe('http://www.montealegreluis.com');
+        $this->url()->shouldBeAnInstanceOf(HttpUri::class);
+        $this->url()->__toString()->shouldBe('http://www.montealegreluis.com');
     }
 }
