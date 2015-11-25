@@ -65,6 +65,14 @@ class Link
     }
 
     /**
+     * @return int
+     */
+    public function id()
+    {
+        return $this->id;
+    }
+
+    /**
      * @return LinkInformation
      */
     public function information()

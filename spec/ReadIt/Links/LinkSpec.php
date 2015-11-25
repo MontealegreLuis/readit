@@ -35,6 +35,16 @@ class LinkSpec extends ObjectBehavior
         ;
     }
 
+    function it_should_know_its_identifier()
+    {
+        $this->beConstructedThrough('post', [
+            'http://www.montealegreluis.com',
+            'My blog'
+        ]);
+
+        $this->id()->shouldBeNull();
+    }
+
     function it_should_allow_adding_votes()
     {
         $this->beConstructedThrough('post', [
