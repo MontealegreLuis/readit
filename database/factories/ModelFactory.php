@@ -26,6 +26,7 @@ $factory->define(\CodeUp\ReadIt\Links\LinkInformation::class, function (Faker\Ge
         'title' => $faker->sentence(8),
         'url' => $faker->url,
         'votes' => $faker->numberBetween(1, 1800),
-        'readitor' => \CodeUp\ReadIt\Links\Readitor::with($user->id, $user->name)->information(),
+        'readitor_id' => $user->id,
+        'name' => $user->name,
     ];
 });

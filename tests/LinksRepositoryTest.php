@@ -104,7 +104,8 @@ class LinksRepositoryTest extends TestCase
             'url' => $faker->url,
             'title' => $faker->sentence(8),
             'votes' => $votes,
-            'readitor' => Readitor::with($user->id, $user->name)->information(),
+            'readitor_id' => $user->id,
+            'name' => $user->name,
         ]);
     }
 }

@@ -49,8 +49,9 @@ class LinkSpec extends ObjectBehavior
         $this->id()->shouldBeNull();
     }
 
-    function it_should_allow_adding_votes(Readitor $readitor)
+    function it_should_allow_adding_votes()
     {
+        $readitor = Readitor::with(1, 'Luis Montealegre');
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
             'My blog',
@@ -61,8 +62,9 @@ class LinkSpec extends ObjectBehavior
         $this->information()->votes()->shouldBe(2);
     }
 
-    function it_should_allow_subtracting_votes(Readitor $readitor)
+    function it_should_allow_subtracting_votes()
     {
+        $readitor = Readitor::with(1, 'Luis Montealegre');
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
             'My blog',

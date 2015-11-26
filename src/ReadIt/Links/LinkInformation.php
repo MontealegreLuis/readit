@@ -37,7 +37,7 @@ class LinkInformation
         isset($information['title']) && $this->title = $information['title'];
         isset($information['url']) && $this->url = HttpUri::createFromString($information['url']);
         isset($information['votes']) && $this->votes = $information['votes'];
-        isset($information['readitor']) && $this->readitor = $information['readitor'];
+        $this->readitor = new ReaditorInformation($information);
     }
 
     /**

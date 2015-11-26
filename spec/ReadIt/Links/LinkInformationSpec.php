@@ -6,7 +6,6 @@
  */
 namespace spec\CodeUp\ReadIt\Links;
 
-use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\ReaditorInformation;
 use League\Uri\Schemes\Http as HttpUri;
 use PhpSpec\ObjectBehavior;
@@ -47,7 +46,8 @@ class LinkInformationSpec extends ObjectBehavior
     function it_should_know_its_readitor()
     {
         $this->beConstructedWith([
-            'readitor' => Readitor::with(1,  'Luis Montealegre')->information(),
+            'readitor_id' => 1,
+            'name' => 'Luis Montealegre',
         ]);
 
         $this->readitor()->shouldBeAnInstanceOf(ReaditorInformation::class);

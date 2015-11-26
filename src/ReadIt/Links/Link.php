@@ -56,6 +56,7 @@ class Link
         );
         $link->id = $information->id();
         $link->votes = $information->votes();
+        $link->readitor = Readitor::from($information->readitor());
 
         return $link;
     }
@@ -105,7 +106,8 @@ class Link
             'title' => $this->title,
             'url' => $this->url,
             'votes' => $this->votes,
-            'readitor' => $this->readitor->information(),
+            'readitor_id' => $this->readitor->information()->id(),
+            'name' => $this->readitor->information()->name(),
         ]);
     }
 
