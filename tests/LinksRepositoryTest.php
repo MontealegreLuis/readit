@@ -68,9 +68,10 @@ class LinksRepositoryTest extends TestCase
 
         $foundLink = $links->withId($link->id());
 
-        $this->assertEquals($link->id(), $foundLink->id());
-        $this->assertEquals($link->url(), $foundLink->url());
-        $this->assertEquals($link->title(), $foundLink->title());
+        $this->assertEquals($link->id(), $foundLink->information()->id());
+        $this->assertEquals($link->url(), $foundLink->information()->url());
+        $this->assertEquals($link->title(), $foundLink->information()->title());
+        $this->assertEquals($link->votes(), $foundLink->information()->votes());
     }
 
     /** @test */

@@ -19,7 +19,7 @@ class ReaditorInformation
      */
     public function __construct(array $information)
     {
-        isset($information['id']) && $this->id = $information['id'];
+        isset($information['readitor_id']) && $this->id = $information['readitor_id'];
         isset($information['name']) && $this->name = $information['name'];
     }
 

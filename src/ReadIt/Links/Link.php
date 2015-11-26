@@ -44,6 +44,23 @@ class Link
     }
 
     /**
+     * @param LinkInformation $information
+     * @return Link
+     */
+    public static function from(LinkInformation $information)
+    {
+        $link = new Link(
+            (string) $information->url(),
+            $information->title(),
+            Readitor::from($information->readitor())
+        );
+        $link->id = $information->id();
+        $link->votes = $information->votes();
+
+        return $link;
+    }
+
+    /**
      * @param string $url
      * @param string $title
      * @param Readitor $readitor
@@ -84,6 +101,7 @@ class Link
     public function information()
     {
         return new LinkInformation([
+            'id' => $this->id,
             'title' => $this->title,
             'url' => $this->url,
             'votes' => $this->votes,

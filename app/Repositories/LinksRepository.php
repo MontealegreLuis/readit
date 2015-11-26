@@ -6,6 +6,7 @@
  */
 namespace App\Repositories;
 
+use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\ReaditorInformation;
@@ -23,30 +24,31 @@ class LinksRepository extends Model implements Links
      */
     public function add(LinkInformation $link)
     {
-        $link = $this->create([
+        $linkInformation = $this->create([
             'url' => $link->url(),
             'title' => $link->title(),
             'votes' => $link->votes(),
             'readitor_id' => $link->readitor()->id(),
         ]);
+        $information = $linkInformation->toArray();
+        $information['name'] = $link->readitor()->name();
+        $information['readitor'] = new ReaditorInformation($information);
 
-        return new LinkInformation($link->toArray());
+        return new LinkInformation($information);
     }
 
     /**
      * @param int $id
-     * @return LinkInformation|null
+     * @return Link|null
      */
     public function withId($id)
     {
-        $link = $this
-            ->query()
-            ->getQuery()
-            ->where('id', '=', $id)
+        $link = $this->getReaditorQueryBuilder()
+            ->where('links.id', '=', $id)
             ->first()
         ;
 
-        return is_array($link) ? new LinkInformation($link) : null;
+        return is_array($link) ? Link::from($this->hydrateLink($link)) : null;
     }
 
     /**
@@ -54,7 +56,22 @@ class LinksRepository extends Model implements Links
      */
     public function orderedByVotes()
     {
-        $links = $this
+        $links = $this->getReaditorQueryBuilder()->get();
+
+        return array_map([$this, 'hydrateLink'], $links);
+    }
+
+    public function refresh(LinkInformation $link)
+    {
+        // TODO: Implement refresh() method.
+    }
+
+    /**
+     * @return \Illuminate\Database\Query\Builder
+     */
+    private function getReaditorQueryBuilder()
+    {
+        return $this
             ->query()
             ->getQuery()
             ->select([
@@ -67,17 +84,17 @@ class LinksRepository extends Model implements Links
             ])
             ->orderBy('votes', 'desc')
             ->join('users', 'users.id', '=', 'links.readitor_id')
-            ->get()
         ;
-
-        return array_map(function(array $information) {
-            $information['readitor'] = new ReaditorInformation($information);
-            return new LinkInformation($information);
-        }, $links);
     }
 
-    public function refresh(LinkInformation $link)
+    /**
+     * @param array $information
+     * @return LinkInformation
+     */
+    private function hydrateLink(array $information)
     {
-        // TODO: Implement refresh() method.
+        $information['readitor'] = new ReaditorInformation($information);
+
+        return new LinkInformation($information);
     }
 }

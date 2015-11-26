@@ -29,6 +29,15 @@ class Readitor
     }
 
     /**
+     * @param ReaditorInformation $information
+     * @return Readitor
+     */
+    public static function from(ReaditorInformation $information)
+    {
+        return new Readitor($information->id(), $information->name());
+    }
+
+    /**
      * @param int $id
      * @param string $name
      * @return Readitor
@@ -52,7 +61,7 @@ class Readitor
     public function information()
     {
         return new ReaditorInformation([
-            'id' => $this->id,
+            'readitor_id' => $this->id,
             'name' => $this->name,
         ]);
     }

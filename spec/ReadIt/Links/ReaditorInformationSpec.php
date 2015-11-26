@@ -13,7 +13,7 @@ class ReaditorInformationSpec extends ObjectBehavior
     function let()
     {
         $this->beConstructedWith([
-            'id' => 1,
+            'readitor_id' => 1,
             'name' => 'Luis Montealegre'
         ]);
     }
