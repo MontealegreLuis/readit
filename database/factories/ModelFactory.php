@@ -21,11 +21,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(\CodeUp\ReadIt\Links\LinkInformation::class, function (Faker\Generator $faker) {
+    $user = factory(App\User::class)->create();
     return [
         'title' => $faker->sentence(8),
         'url' => $faker->url,
         'votes' => $faker->numberBetween(1, 1800),
-        'readitor_id' => factory(App\User::class)->create()->id,
-        'name' => $faker->name,
+        'readitor' => \CodeUp\ReadIt\Links\Readitor::with($user->id, $user->name)->information(),
     ];
 });

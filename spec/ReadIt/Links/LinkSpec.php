@@ -6,13 +6,13 @@
  */
 namespace spec\CodeUp\ReadIt\Links;
 
-use CodeUp\ReadIt\Links\ReaditorInformation;
+use CodeUp\ReadIt\Links\Readitor;
 use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;
 
 class LinkSpec extends ObjectBehavior
 {
-    function it_should_only_allow_http_uris(ReaditorInformation $readitor)
+    function it_should_only_allow_http_uris(Readitor $readitor)
     {
         $this->beConstructedThrough('post', [
             'ftp://www.montealegreluis.com',
@@ -25,7 +25,7 @@ class LinkSpec extends ObjectBehavior
         ;
     }
 
-    function it_should_not_allow_empty_titles(ReaditorInformation $readitor)
+    function it_should_not_allow_empty_titles(Readitor $readitor)
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
@@ -38,7 +38,7 @@ class LinkSpec extends ObjectBehavior
         ;
     }
 
-    function it_should_know_its_identifier(ReaditorInformation $readitor)
+    function it_should_know_its_identifier(Readitor $readitor)
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
@@ -49,7 +49,7 @@ class LinkSpec extends ObjectBehavior
         $this->id()->shouldBeNull();
     }
 
-    function it_should_allow_adding_votes(ReaditorInformation $readitor)
+    function it_should_allow_adding_votes(Readitor $readitor)
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
@@ -61,7 +61,7 @@ class LinkSpec extends ObjectBehavior
         $this->information()->votes()->shouldBe(2);
     }
 
-    function it_should_allow_subtracting_votes(ReaditorInformation $readitor)
+    function it_should_allow_subtracting_votes(Readitor $readitor)
     {
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',

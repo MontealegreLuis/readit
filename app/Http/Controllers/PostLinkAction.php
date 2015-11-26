@@ -8,9 +8,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostLinkRequest;
 use Auth;
-use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Links;
-use CodeUp\ReadIt\Links\ReaditorInformation;
+use CodeUp\ReadIt\Links\Readitor;
 
 class PostLinkAction extends Controller
 {
@@ -29,11 +28,8 @@ class PostLinkAction extends Controller
      */
     public function store(PostLinkRequest $request, Links $links)
     {
-        $link = Link::post(
-            $request->get('url'),
-            $request->get('title'),
-            new ReaditorInformation(Auth::user()->id, Auth::user()->name)
-        );
+        $readitor = Readitor::with(Auth::user()->id, Auth::user()->name);
+        $link = $readitor->post($request->get('url'), $request->get('title'));
         $links->add($link->information());
 
         return redirect('/');

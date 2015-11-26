@@ -9,7 +9,7 @@ namespace App\Repositories;
 use App\User;
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
-use CodeUp\ReadIt\Links\ReaditorInformation;
+use CodeUp\ReadIt\Links\Readitor;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -26,7 +26,7 @@ class LinksRepositoryTest extends TestCase
         $link = Link::post(
             'http://www.montealegreluis.com',
             'My Blog',
-            new ReaditorInformation($user->id, $user->name)
+            Readitor::with($user->id, $user->name)
         );
         $links = new LinksRepository();
 
@@ -46,10 +46,10 @@ class LinksRepositoryTest extends TestCase
         $user = $this->getUserForReaditor();
         $faker = Factory::create();
         $links = new LinksRepository();
-        $links->add($this->getPostedLink($faker, 100, $user));
-        $links->add($this->getPostedLink($faker, 1500, $user));
-        $links->add($this->getPostedLink($faker, 15, $user));
-        $links->add($this->getPostedLink($faker, 89, $user));
+        $links->add($this->getLinkWithVotes($faker, 100, $user));
+        $links->add($this->getLinkWithVotes($faker, 1500, $user));
+        $links->add($this->getLinkWithVotes($faker, 15, $user));
+        $links->add($this->getLinkWithVotes($faker, 89, $user));
 
         $orderdedLinks = $links->orderedByVotes();
 
@@ -97,14 +97,13 @@ class LinksRepositoryTest extends TestCase
      * @param User $user
      * @return LinkInformation
      */
-    private function getPostedLink(Generator $faker, $votes, User $user)
+    private function getLinkWithVotes(Generator $faker, $votes, User $user)
     {
         return new LinkInformation([
             'url' => $faker->url,
             'title' => $faker->sentence(8),
             'votes' => $votes,
-            'readitor_id' => $user->id,
-            'name' => $user->name,
+            'readitor' => Readitor::with($user->id, $user->name)->information(),
         ]);
     }
 }

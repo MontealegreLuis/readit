@@ -15,13 +15,12 @@ class ReaditorInformation
     private $name;
 
     /**
-     * @param int $id
-     * @param string $name
+     * @param array $information
      */
-    public function __construct($id, $name)
+    public function __construct(array $information)
     {
-        $this->id = $id;
-        $this->name = $name;
+        isset($information['id']) && $this->id = $information['id'];
+        isset($information['name']) && $this->name = $information['name'];
     }
 
     /**

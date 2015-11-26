@@ -12,47 +12,80 @@ namespace CodeUp\ReadIt\Links;
  */
 class Readitor
 {
-    /**
-     * @var VotedLinks IDs of the links voted by this Readitor
-     */
-    private $votedLinks;
+    /** @var int */
+    private $id;
+
+    /** @var string */
+    private $name;
 
     /**
-     * @param VotedLinks $votedLinks
+     * @param int $id
+     * @param string $name
      */
-    public function __construct(VotedLinks $votedLinks)
+    private function __construct($id, $name)
     {
-        $this->votedLinks = $votedLinks;
+        $this->id = $id;
+        $this->name = $name;
+    }
+
+    /**
+     * @param int $id
+     * @param string $name
+     * @return Readitor
+     */
+    public static function with($id, $name)
+    {
+        return new Readitor($id, $name);
+    }
+
+    /**
+     * @return int
+     */
+    public function id()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return ReaditorInformation
+     */
+    public function information()
+    {
+        return new ReaditorInformation([
+            'id' => $this->id,
+            'name' => $this->name,
+        ]);
+    }
+
+    /**
+     * @param string $url
+     * @param string $title
+     * @return Link
+     */
+    public function post($url, $title)
+    {
+        return Link::post($url, $title, $this);
     }
 
     /**
      * @param Link $link
+     * @return Vote
      */
     public function upvoteLink(Link $link)
     {
-        $this->guardAgainstDuplicateVotes($link);
         $link->upvote();
-        $this->votedLinks->add($link->id());
+
+        return Vote::upvote($link, $this);
     }
 
     /**
      * @param Link $link
+     * @return Vote
      */
     public function downvoteLink(Link $link)
     {
-        $this->guardAgainstDuplicateVotes($link);
         $link->downvote();
-        $this->votedLinks->add($link->id());
-    }
 
-    /**
-     * @param Link $link
-     * @throws AlreadyVotedForLink If the link has already been voted by this readitor
-     */
-    private function guardAgainstDuplicateVotes(Link $link)
-    {
-        if ($this->votedLinks->contains($link->id())) {
-            throw new AlreadyVotedForLink("Cannot vote twice for link {$link->id()}");
-        }
+        return Vote::downvote($link, $this);
     }
 }

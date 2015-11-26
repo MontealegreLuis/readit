@@ -13,6 +13,7 @@ interface Links
 {
     /**
      * @param LinkInformation $link
+     * @return LinkInformation
      */
     public function add(LinkInformation $link);
 

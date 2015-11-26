@@ -8,6 +8,7 @@ namespace App\Repositories;
 
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
+use CodeUp\ReadIt\Links\ReaditorInformation;
 use Illuminate\Database\Eloquent\Model;
 
 class LinksRepository extends Model implements Links
@@ -16,6 +17,10 @@ class LinksRepository extends Model implements Links
 
     protected $fillable = ['url', 'title', 'votes', 'readitor_id'];
 
+    /**
+     * @param LinkInformation $link
+     * @return LinkInformation It will contain the ID assigned by the database
+     */
     public function add(LinkInformation $link)
     {
         $link = $this->create([
@@ -52,12 +57,21 @@ class LinksRepository extends Model implements Links
         $links = $this
             ->query()
             ->getQuery()
+            ->select([
+                'links.id',
+                'links.url',
+                'links.title',
+                'links.votes',
+                'users.id as readitor_id',
+                'users.name',
+            ])
             ->orderBy('votes', 'desc')
             ->join('users', 'users.id', '=', 'links.readitor_id')
             ->get()
         ;
 
         return array_map(function(array $information) {
+            $information['readitor'] = new ReaditorInformation($information);
             return new LinkInformation($information);
         }, $links);
     }
