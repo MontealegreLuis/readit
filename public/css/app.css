@@ -2,6 +2,10 @@ form > div {
     margin-bottom: 25px;
 }
 
+.nav-text {
+    line-height: 3.5em;
+}
+
 .votes {
     font-size: 2em;
     text-align: center;

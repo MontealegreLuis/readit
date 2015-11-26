@@ -7,8 +7,10 @@
 namespace App\Providers;
 
 use App\Repositories\LinksRepository;
+use Auth;
 use CodeUp\ReadIt\Links\Links;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer('partials.nav', function(View $view) {
+            $view->with('readitor', Auth::user());
+        });
     }
 
     /**
