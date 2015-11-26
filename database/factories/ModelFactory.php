@@ -19,3 +19,13 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(\CodeUp\ReadIt\Links\LinkInformation::class, function (Faker\Generator $faker) {
+    return [
+        'title' => $faker->sentence(8),
+        'url' => $faker->url,
+        'votes' => $faker->numberBetween(1, 1800),
+        'readitor_id' => factory(App\User::class)->create()->id,
+        'name' => $faker->name,
+    ];
+});
