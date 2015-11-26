@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'ViewLinksAction@show');
+Route::get('/links/create', 'PostLinkAction@create');
+Route::post('/links/store', 'PostLinkAction@store');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',
