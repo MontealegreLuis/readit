@@ -59,15 +59,36 @@ class LinksRepositoryTest extends TestCase
         $this->assertEquals(15, $orderdedLinks[3]->votes());
     }
 
+    /** @test */
+    function it_should_find_a_link_by_its_id()
+    {
+        $link = factory(LinkInformation::class)->make();
+        $links = new LinksRepository();
+        $link = $links->add($link);
+
+        $foundLink = $links->withId($link->id());
+
+        $this->assertEquals($link->id(), $foundLink->id());
+        $this->assertEquals($link->url(), $foundLink->url());
+        $this->assertEquals($link->title(), $foundLink->title());
+    }
+
+    /** @test */
+    function it_should_not_find_a_link_with_invalid_id()
+    {
+        $links = new LinksRepository();
+
+        $link = $links->withId($invalidId = 1000);
+
+        $this->assertNull($link);
+    }
+
     /**
      * @return User
      */
     private function getUserForReaditor()
     {
-        $user = factory(User::class)->make();
-        $user->save();
-
-        return $user;
+        return factory(User::class)->create();
     }
 
     /**

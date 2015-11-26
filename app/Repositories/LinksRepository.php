@@ -28,9 +28,20 @@ class LinksRepository extends Model implements Links
         return new LinkInformation($link->toArray());
     }
 
+    /**
+     * @param int $id
+     * @return LinkInformation|null
+     */
     public function withId($id)
     {
-        // TODO: Implement withId() method.
+        $link = $this
+            ->query()
+            ->getQuery()
+            ->where('id', '=', $id)
+            ->first()
+        ;
+
+        return is_array($link) ? new LinkInformation($link) : null;
     }
 
     /**
