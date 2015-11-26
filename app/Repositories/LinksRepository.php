@@ -10,6 +10,7 @@ use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\ReaditorInformation;
+use CodeUp\ReadIt\Links\UnknownLink;
 use Illuminate\Database\Eloquent\Model;
 
 class LinksRepository extends Model implements Links
@@ -39,7 +40,8 @@ class LinksRepository extends Model implements Links
 
     /**
      * @param int $id
-     * @return Link|null
+     * @return Link
+     * @throws UnknownLink
      */
     public function withId($id)
     {
@@ -48,7 +50,11 @@ class LinksRepository extends Model implements Links
             ->first()
         ;
 
-        return is_array($link) ? Link::from($this->hydrateLink($link)) : null;
+        if (!$link) {
+            throw new UnknownLink("Cannot find link with ID {$id}");
+        }
+
+        return Link::from($this->hydrateLink($link));
     }
 
     /**

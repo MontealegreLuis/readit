@@ -25,6 +25,7 @@ interface Links
     /**
      * @param int $id
      * @return Link
+     * @throws UnknownLink
      */
     public function withId($id);
 

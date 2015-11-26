@@ -74,14 +74,15 @@ class LinksRepositoryTest extends TestCase
         $this->assertEquals($link->votes(), $foundLink->information()->votes());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @expectedException \CodeUp\ReadIt\Links\UnknownLink
+     */
     function it_should_not_find_a_link_with_invalid_id()
     {
         $links = new LinksRepository();
 
-        $link = $links->withId($invalidId = 1000);
-
-        $this->assertNull($link);
+        $links->withId($invalidId = 1000);
     }
 
     /**
