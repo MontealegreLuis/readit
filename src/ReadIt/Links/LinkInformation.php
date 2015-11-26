@@ -13,6 +13,9 @@ use League\Uri\Schemes\Http as HttpUri;
  */
 class LinkInformation
 {
+    /** @var int */
+    private $id;
+
     /** @var string */
     private $title;
 
@@ -22,14 +25,39 @@ class LinkInformation
     /** @var int */
     private $votes;
 
+    /** @var  ReaditorInformation */
+    private $readitor;
+
     /**
      * @param array $information
      */
     public function __construct(array $information)
     {
+        isset($information['id']) && $this->id = $information['id'];
         isset($information['title']) && $this->title = $information['title'];
         isset($information['url']) && $this->url = HttpUri::createFromString($information['url']);
         isset($information['votes']) && $this->votes = $information['votes'];
+        $this->setReaditorInformation($information);
+    }
+
+    /**
+     * @param array $information
+     */
+    private function setReaditorInformation(array $information)
+    {
+        if (isset($information['name']) && isset($information['readitor_id'])) {
+            $this->readitor = new ReaditorInformation(
+                $information['readitor_id'], $information['name']
+            );
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function id()
+    {
+        return $this->id;
     }
 
     /**
@@ -54,5 +82,13 @@ class LinkInformation
     public function url()
     {
         return $this->url;
+    }
+
+    /**
+     * @return ReaditorInformation
+     */
+    public function readitor()
+    {
+        return $this->readitor;
     }
 }

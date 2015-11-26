@@ -27,15 +27,15 @@ class Link
     /** @var int */
     private $votes;
 
-    /** @var Readitor */
+    /** @var ReaditorInformation */
     private $readitor;
 
     /**
      * @param string $url
      * @param string $title
-     * @param Readitor $readitor
+     * @param ReaditorInformation $readitor
      */
-    private function __construct($url, $title, Readitor $readitor)
+    private function __construct($url, $title, ReaditorInformation $readitor)
     {
         $this->setUrl($url);
         $this->setTitle($title);
@@ -46,10 +46,10 @@ class Link
     /**
      * @param string $url
      * @param string $title
-     * @param Readitor $readitor
+     * @param ReaditorInformation $readitor
      * @return Link
      */
-    public static function post($url, $title, Readitor $readitor)
+    public static function post($url, $title, ReaditorInformation $readitor)
     {
         return new Link($url, $title, $readitor);
     }
@@ -87,7 +87,8 @@ class Link
             'title' => $this->title,
             'url' => $this->url,
             'votes' => $this->votes,
-
+            'readitor_id' => $this->readitor->id(),
+            'name' => $this->readitor->name(),
         ]);
     }
 

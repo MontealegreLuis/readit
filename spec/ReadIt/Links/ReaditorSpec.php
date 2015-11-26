@@ -8,7 +8,7 @@ namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\AlreadyVotedForLink;
 use CodeUp\ReadIt\Links\Link;
-use CodeUp\ReadIt\Links\Readitor;
+use CodeUp\ReadIt\Links\ReaditorInformation;
 use CodeUp\ReadIt\Links\VotedLinks;
 use PhpSpec\ObjectBehavior;
 
@@ -35,7 +35,7 @@ class ReaditorSpec extends ObjectBehavior
 
     function it_cannot_vote_twice_for_the_same_link(
         VotedLinks $votedLinks,
-        Readitor $readitor
+        ReaditorInformation $readitor
     ) {
         $link = Link::post(
             'http://www.montealegreluis.com',
