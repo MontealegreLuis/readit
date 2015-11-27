@@ -43,7 +43,6 @@ class UpvoteLink
     public function upvote($linkId, Readitor $readitor)
     {
         $link = $this->links->withId($linkId);
-
         $existingVote = $this->votes->givenTo($link, $readitor);
         if ($existingVote && $existingVote->isPositive()) {
             $this->removeVote($readitor, $existingVote, $link);

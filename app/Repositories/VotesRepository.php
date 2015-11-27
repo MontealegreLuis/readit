@@ -38,11 +38,7 @@ class VotesRepository extends Model implements Votes
             return null;
         }
 
-        if ((int) $vote['type'] === Vote::POSITIVE) {
-            return Vote::upvote($link, $byReaditor);
-        }
-
-        return Vote::downvote($link, $byReaditor);
+        return Vote::from(new VoteInformation($vote));
     }
 
     /**
@@ -67,5 +63,19 @@ class VotesRepository extends Model implements Votes
     public function remove(Vote $vote)
     {
         $this->destroy($vote->id());
+    }
+
+    /**
+     * @param Vote $vote
+     */
+    public function refresh(Vote $vote)
+    {
+        $information = $vote->information();
+
+        $this->update([
+            'link_id' => $information->linkId(),
+            'readitor_id' => $information->readitorId(),
+            'type' => $information->type(),
+        ]);
     }
 }

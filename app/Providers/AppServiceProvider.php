@@ -7,8 +7,10 @@
 namespace App\Providers;
 
 use App\Repositories\LinksRepository;
+use App\Repositories\VotesRepository;
 use Auth;
 use CodeUp\ReadIt\Links\Links;
+use CodeUp\ReadIt\Links\Votes;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
 
@@ -34,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(Links::class, LinksRepository::class);
+        $this->app->bind(Votes::class, VotesRepository::class);
     }
 }

@@ -69,7 +69,12 @@ class LinksRepository extends Model implements Links
 
     public function refresh(LinkInformation $link)
     {
-        // TODO: Implement refresh() method.
+        $this->update([
+            'id' => $link->id(),
+            'title' => $link->title(),
+            'url' => $link->url(),
+            'votes' => $link->votes(),
+        ]);
     }
 
     /**

@@ -27,4 +27,9 @@ interface Votes
      * @param Vote $vote
      */
     public function remove(Vote $vote);
+
+    /**
+     * @param Vote $vote
+     */
+    public function refresh(Vote $vote);
 }
