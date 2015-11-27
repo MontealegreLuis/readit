@@ -9,27 +9,54 @@ namespace spec\CodeUp\ReadIt\Links;
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Readitor;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 
 class VoteSpec extends ObjectBehavior
 {
+    /** @var Readitor */
+    private $readitor;
+
+    /** @var Link */
+    private $link;
+
+    function let()
+    {
+        $this->readitor = Readitor::with(1, 'Luis Montealegre');
+        $this->link = Link::post(
+            'http://www.montealegreluis.com',
+            'My blog',
+            $this->readitor
+        );
+    }
+
     function it_shoul_create_a_downvote()
     {
-        $readitor = Readitor::with(1, 'Luis Montealegre');
-        $link = Link::post('http://www.montealegreluis.com', 'My blog', $readitor);
-
-        $this->beConstructedThrough('downvote', [$link, $readitor]);
+        $this->beConstructedThrough('downvote', [$this->link, $this->readitor]);
 
         $this->isNegative()->shouldBe(true);
     }
 
     function it_shoul_create_an_upvote()
     {
-        $readitor = Readitor::with(1, 'Luis Montealegre');
-        $link = Link::post('http://www.montealegreluis.com', 'My blog', $readitor);
-
-        $this->beConstructedThrough('upvote', [$link, $readitor]);
+        $this->beConstructedThrough('upvote', [$this->link, $this->readitor]);
 
         $this->isPositive()->shouldBe(true);
+    }
+
+    function it_should_switch_from_negative_to_positive()
+    {
+        $this->beConstructedThrough('downvote', [$this->link, $this->readitor]);
+
+        $this->toggle();
+
+        $this->isPositive()->shouldBe(true);
+    }
+
+    function it_should_switch_from_positive_to_negative()
+    {
+        $this->beConstructedThrough('upvote', [$this->link, $this->readitor]);
+
+        $this->toggle();
+
+        $this->isNegative()->shouldBe(true);
     }
 }

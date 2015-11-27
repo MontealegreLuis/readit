@@ -89,6 +89,36 @@ class Link
     }
 
     /**
+     * If a readitor toggles its vote, votes count should increase by 2 if vote,
+     * was negative, it should decrease by 2 if it was positive.
+     *
+     * @param Vote $vote
+     */
+    public function toggle(Vote $vote)
+    {
+        if ($vote->isNegative()) {
+            $this->votes += 2;
+        } else {
+            $this->votes -= 2;
+        }
+    }
+
+    /**
+     * Update this link count by adding or subtracting a vote, depending on its
+     * vote type
+     *
+     * @param Vote $vote
+     */
+    public function cancel(Vote $vote)
+    {
+        if ($vote->isNegative()) {
+            $this->upvote();
+        } else {
+            $this->downvote();
+        }
+    }
+
+    /**
      * @return int
      */
     public function id()
@@ -116,7 +146,7 @@ class Link
      */
     private function setUrl($url)
     {
-        Assertion::url($url);
+        Assertion::url($url, 'Only valid HTTP URLs are valid');
         $this->url = $url;
     }
 

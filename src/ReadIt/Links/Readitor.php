@@ -97,4 +97,27 @@ class Readitor
 
         return Vote::downvote($link, $this);
     }
+
+    /**
+     * It cancel either an upvote or a downvote by updating a link's votes count
+     *
+     * @param Link $link
+     * @param Vote $vote
+     */
+    public function cancelVote(Link $link, Vote $vote)
+    {
+        $link->cancel($vote);
+    }
+
+    /**
+     * It toggles upvotes and downvotes and updates link's votes count
+     *
+     * @param Link $link
+     * @param Vote $vote
+     */
+    public function toggleVote(Link $link, Vote $vote)
+    {
+        $link->toggle($vote);
+        $vote->toggle();
+    }
 }

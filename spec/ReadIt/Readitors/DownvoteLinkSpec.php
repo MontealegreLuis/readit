@@ -12,9 +12,9 @@ use CodeUp\ReadIt\Links\Votes;
 use PhpSpec\Specs\VoteLinkSpec;
 use Prophecy\Argument;
 
-class UpvoteLinkSpec extends VoteLinkSpec
+class DownvoteLinkSpec extends VoteLinkSpec
 {
-    function it_should_upvote_a_link(Links $links, Votes $votes)
+    function it_should_downvote_a_link(Links $links, Votes $votes)
     {
         // Given
         $this->anExistingLink($links);
@@ -28,11 +28,11 @@ class UpvoteLinkSpec extends VoteLinkSpec
         $this->vote(1, $this->readitor);
     }
 
-    function it_should_cancel_a_previous_upvote(Links $links, Votes $votes)
+    function it_should_cancel_a_previous_downvote(Links $links, Votes $votes)
     {
         // Given
         $this->anExistingLink($links);
-        $this->readitorHasUpvotedForLink($votes);
+        $this->readitorHasDownvotedForLink($votes);
 
         // Then
         $this->linkGetsUpdated($links);
@@ -46,7 +46,7 @@ class UpvoteLinkSpec extends VoteLinkSpec
     {
         // Given
         $this->anExistingLink($links);
-        $this->readitorHasDownvotedForLink($votes);
+        $this->readitorHasUpvotedForLink($votes);
 
         // Then
         $this->linkGetsUpdated($links);

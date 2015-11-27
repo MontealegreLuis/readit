@@ -111,4 +111,12 @@ class Vote
     {
         return $this->type === Vote::NEGATIVE;
     }
+
+    /**
+     * Toggle this vote type
+     */
+    public function toggle()
+    {
+        $this->type *= -1;
+    }
 }

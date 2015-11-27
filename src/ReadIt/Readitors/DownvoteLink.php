@@ -10,15 +10,11 @@ use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\Vote;
 
-/**
- * A readitor can only upvote for a link once, if a second attempt is done,
- * first vote will be removed.
- */
-class UpvoteLink extends VoteLink
+class DownvoteLink extends VoteLink
 {
     /**
-     * Cancel the vote if readitor is trying to upvote again.
-     * Switch to an upvote if readitor previously downvoted this link.
+     * Cancel the vote if readitor is trying to downvote again.
+     * Switch to a downvote if readitor previously upvoted this link.
      *
      * @param Vote $vote
      * @param Readitor $readitor
@@ -29,7 +25,7 @@ class UpvoteLink extends VoteLink
         Readitor $readitor,
         Link $link
     ) {
-        if ($vote->isPositive()) {
+        if ($vote->isNegative()) {
             $this->cancelVote($vote, $readitor, $link);
         } else {
             $this->toggleVote($vote, $readitor, $link);
@@ -37,14 +33,14 @@ class UpvoteLink extends VoteLink
     }
 
     /**
-     * Upvote link
+     * Downvote link
      *
      * @param Readitor $readitor
      * @param Link $link
      */
     protected function applyVote(Readitor $readitor, Link $link)
     {
-        $vote = $readitor->upvoteLink($link);
+        $vote = $readitor->downvoteLink($link);
         $this->votes->add($vote);
     }
 }

@@ -7,6 +7,7 @@
 namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\Link;
+use CodeUp\ReadIt\Links\Vote;
 use PhpSpec\ObjectBehavior;
 
 class ReaditorSpec extends ObjectBehavior
@@ -37,5 +38,14 @@ class ReaditorSpec extends ObjectBehavior
         $link->information()->title()->shouldBe('My blog');
         $link->information()->readitor()->name()->shouldBe('Luis Montealegre');
         $link->information()->readitor()->id()->shouldBe(1);
+    }
+
+    function it_should_cancel_a_vote(Link $link, Vote $vote)
+    {
+        $vote->isNegative()->willReturn(false);
+
+        $this->cancelVote($link, $vote);
+
+        $link->cancel($vote)->shouldHaveBeenCalled();
     }
 }
