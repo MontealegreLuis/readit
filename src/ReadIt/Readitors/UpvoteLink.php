@@ -6,8 +6,10 @@
  */
 namespace CodeUp\ReadIt\Readitors;
 
+use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\Readitor;
+use CodeUp\ReadIt\Links\Vote;
 use CodeUp\ReadIt\Links\Votes;
 
 /**

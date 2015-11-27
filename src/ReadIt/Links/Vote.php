@@ -13,6 +13,9 @@ namespace CodeUp\ReadIt\Links;
 class Vote
 {
     /** @var int */
+    private $id;
+
+    /** @var int */
     private $linkId;
 
     /** @var int */
@@ -54,6 +57,43 @@ class Vote
     public static function downvote(Link $link, Readitor $readitor)
     {
         return new Vote($link->id(), $readitor->id(), Vote::NEGATIVE);
+    }
+
+    /**
+     * @param VoteInformation $information
+     * @return Vote
+     */
+    public static function from(VoteInformation $information)
+    {
+        $vote = new Vote(
+            $information->linkId(),
+            $information->readitorId(),
+            $information->type()
+        );
+        $vote->id = $information->id();
+
+        return $vote;
+    }
+
+    /**
+     * @return int
+     */
+    public function id()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return VoteInformation
+     */
+    public function information()
+    {
+        return new VoteInformation([
+            'id' => $this->id,
+            'link_id' => $this->linkId,
+            'readitor_id' => $this->readitorId,
+            'type' => $this->type,
+        ]);
     }
 
     /**

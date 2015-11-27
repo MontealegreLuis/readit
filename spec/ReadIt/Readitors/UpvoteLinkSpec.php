@@ -23,17 +23,22 @@ class UpvoteLinkSpec extends ObjectBehavior
         $this->beConstructedWith($links, $votes);
     }
 
-    function it_should_upvote_a_link(Links $links, Votes $votes, Link $link)
+    function it_should_upvote_a_link(Links $links, Votes $votes)
     {
         $readitor = Readitor::with(1, 'Luis Montealegre');
-        $linkInformation = new LinkInformation([]);
+        $link = Link::from(new LinkInformation([
+            'id' => 1,
+            'votes' => 10,
+            'url' => 'http://www.montealegreluis.com',
+            'title' => 'My blog',
+        ]));
 
         // Given
-        $this->anExistingLink($links, $link, $linkInformation);
+        $this->anExistingLink($links, $link);
         $this->readitorHasNotVotedForLink($votes, $link, $readitor);
 
         // Then
-        $this->linkGetsAnUpvote($links, $link, $linkInformation);
+        $this->linkGetsUpdated($links);
         $this->linkIsAddedToReaditorsVotes($votes);
 
         // When
@@ -42,18 +47,22 @@ class UpvoteLinkSpec extends ObjectBehavior
 
     function it_should_remove_vote_if_link_was_previously_upvoted(
         Links $links,
-        Votes $votes,
-        Link $link
+        Votes $votes
     ) {
         $readitor = Readitor::with(1, 'Luis Montealegre');
-        $linkInformation = new LinkInformation([]);
+        $link = Link::from(new LinkInformation([
+            'id' => 1,
+            'votes' => 10,
+            'url' => 'http://www.montealegreluis.com',
+            'title' => 'My blog',
+        ]));
 
         // Given
-        $this->anExistingLink($links, $link, $linkInformation);
+        $this->anExistingLink($links, $link);
         $this->readitorHasUpvotedForLink($votes, $link, $readitor);
 
         // Then
-        $this->linkGetsAnDownvote($links, $link, $linkInformation);
+        $this->linkGetsUpdated($links);
         $this->linkIsRemovedFromReaditorsVotes($votes);
 
         // When
@@ -87,7 +96,7 @@ class UpvoteLinkSpec extends ObjectBehavior
     /**
      * @param Votes $votes
      * @param Link $link
-     * @param $readitor
+     * @param Readitor $readitor
      */
     private function readitorHasUpvotedForLink(
         Votes $votes,
@@ -96,19 +105,16 @@ class UpvoteLinkSpec extends ObjectBehavior
     ) {
         $votes
             ->givenTo($link, $readitor)
-            ->willReturn(Vote::upvote($link->getWrappedObject(), $readitor))
+            ->willReturn(Vote::upvote($link, $readitor))
         ;
     }
 
     /**
      * @param Links $links
      * @param Link $link
-     * @param $linkInformation
      */
-    private function anExistingLink(Links $links, Link $link, $linkInformation)
+    private function anExistingLink(Links $links, Link $link)
     {
-        $link->information()->willReturn($linkInformation);
-        $link->id()->willReturn(1);
         $links->withId(1)->willReturn($link);
     }
 
@@ -122,13 +128,10 @@ class UpvoteLinkSpec extends ObjectBehavior
 
     /**
      * @param Links $links
-     * @param Link $link
-     * @param $linkInformation
      */
-    private function linkGetsAnUpvote(Links $links, Link $link, $linkInformation)
+    private function linkGetsUpdated(Links $links)
     {
-        $link->upvote()->shouldBeCalled();
-        $links->refresh($linkInformation)->shouldBeCalled();
+        $links->refresh(Argument::type(LinkInformation::class))->shouldBeCalled();
     }
 
     /**
@@ -136,8 +139,11 @@ class UpvoteLinkSpec extends ObjectBehavior
      * @param Link $link
      * @param $linkInformation
      */
-    private function linkGetsAnDownvote(Links $links, Link $link, $linkInformation)
-    {
+    private function linkGetsAnDownvote(
+        Links $links,
+        Link $link,
+        LinkInformation $linkInformation
+    ) {
         $link->downvote()->shouldBeCalled();
         $links->refresh($linkInformation)->shouldBeCalled();
     }

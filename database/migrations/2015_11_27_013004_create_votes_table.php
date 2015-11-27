@@ -7,7 +7,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLinksTable extends Migration
+class CreateVotesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,19 +16,22 @@ class CreateLinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('links', function (Blueprint $table) {
+        Schema::create('votes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('url');
-            $table->string('title');
-            $table->integer('votes');
-            $table->timestamp('decayed_since');
-            $table->timestamps();
             $table->integer('readitor_id')->unsigned();
             $table
                 ->foreign('readitor_id')
                 ->references('id')
                 ->on('users')
             ;
+            $table->integer('link_id')->unsigned();
+            $table
+                ->foreign('link_id')
+                ->references('id')
+                ->on('links')
+            ;
+            $table->tinyInteger('type');
+            $table->timestamps();
         });
     }
 
@@ -39,6 +42,6 @@ class CreateLinksTable extends Migration
      */
     public function down()
     {
-        Schema::drop('links');
+        Schema::drop('votes');
     }
 }

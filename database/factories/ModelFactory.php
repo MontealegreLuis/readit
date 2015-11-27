@@ -10,8 +10,12 @@
 | database. Just tell the factory how a default model should look.
 |
 */
+use App\User;
+use CodeUp\ReadIt\Links\LinkInformation;
+use CodeUp\ReadIt\Links\Vote;
+use CodeUp\ReadIt\Links\VoteInformation;
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
@@ -20,8 +24,8 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(\CodeUp\ReadIt\Links\LinkInformation::class, function (Faker\Generator $faker) {
-    $user = factory(App\User::class)->create();
+$factory->define(LinkInformation::class, function (Faker\Generator $faker) {
+    $user = factory(User::class)->create();
     return [
         'title' => $faker->sentence(8),
         'url' => $faker->url,
@@ -29,4 +33,24 @@ $factory->define(\CodeUp\ReadIt\Links\LinkInformation::class, function (Faker\Ge
         'readitor_id' => $user->id,
         'name' => $user->name,
     ];
+});
+
+$factory->define(VoteInformation::class, function () {
+    /** @var LinkInformation $link */
+    $link = factory(LinkInformation::class)->make();
+    $link = (new \App\Repositories\LinksRepository())->add($link);
+    return [
+        'link_id' => $link->id(),
+        'readitor_id' => $link->readitor()->id(),
+    ];
+});
+
+$factory->defineAs(VoteInformation::class, 'upvote', function() use ($factory) {
+    $vote = $factory->raw(VoteInformation::class);
+    return array_merge($vote, ['type' => Vote::POSITIVE]);
+});
+
+$factory->defineAs(VoteInformation::class, 'downvote', function() use ($factory) {
+    $vote = $factory->raw(VoteInformation::class);
+    return array_merge($vote, ['type' => Vote::NEGATIVE]);
 });

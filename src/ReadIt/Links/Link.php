@@ -125,8 +125,8 @@ class Link
      */
     private function setTitle($title)
     {
-        Assertion::string($title);
-        Assertion::notEmpty($title);
+        Assertion::string($title, 'Link title should be text');
+        Assertion::notEmpty($title, 'Link title should not be empty');
         $this->title = $title;
     }
 }
