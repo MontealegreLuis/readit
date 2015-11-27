@@ -7,13 +7,13 @@
                 <p class="rank">{{ $i + 1 }}</p>
             </div>
             <div class="col-md-1 votes">
-                <a href="#">
+                <a href="#" data-id="{{ $link->id() }}" class="upvote">
                     <i class="glyphicon glyphicon-chevron-up"></i>
                 </a>
-                <div>
+                <div class="votes-count">
                     {{ $link->votes() }}
                 </div>
-                <a href="#">
+                <a href="#" data-id="{{ $link->id() }}" class="downvote">
                     <i class="glyphicon glyphicon-chevron-down"></i>
                 </a>
             </div>
@@ -32,4 +32,8 @@
     @empty
         <p class="lead">No links have been posted</p>
     @endforelse
+@stop
+
+@section('scripts')
+    <script src="/js/app.js"></script>
 @stop
