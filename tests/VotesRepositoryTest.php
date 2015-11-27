@@ -11,12 +11,32 @@ use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\Vote;
 use CodeUp\ReadIt\Links\VoteInformation;
+use DateTime;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use TestCase;
 
 class VotesRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
+
+    /** @var Link */
+    private $link;
+
+    /** @var Readitor */
+    private $readitor;
+
+    /** @before */
+    function init()
+    {
+        $user = factory(User::class)->create();
+        $this->readitor = Readitor::with($user->id, $user->name);
+        $this->link = Link::post(
+            'http://www.montealegreluis.com',
+            'My blog',
+            $this->readitor,
+            DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
+        );
+    }
 
     /** @test */
     function it_should_save_the_vote_of_a_readitor()
@@ -37,14 +57,11 @@ class VotesRepositoryTest extends TestCase
     /** @test */
     function it_should_get_an_existing_readitor_vote()
     {
-        $user = factory(User::class)->create();
-        $readitor = Readitor::with($user->id, $user->name);
-        $link = Link::post('http://www.montealegreluis.com', 'My blog', $readitor);
-        $link = Link::from((new LinksRepository())->add($link->information()));
+        $link = Link::from((new LinksRepository())->add($this->link->information()));
         $votes = new VotesRepository();
-        $votes->add(Vote::upvote($link, $readitor));
+        $votes->add(Vote::upvote($link, $this->readitor));
 
-        $vote = $votes->givenTo($link, $readitor);
+        $vote = $votes->givenTo($link, $this->readitor);
 
         $this->assertInstanceOf(Vote::class, $vote);
     }
@@ -52,13 +69,10 @@ class VotesRepositoryTest extends TestCase
     /** @test */
     function it_should_retrieve_no_vote_if_readitor_has_not_voted_for_link()
     {
-        $user = factory(User::class)->create();
-        $readitor = Readitor::with($user->id, $user->name);
-        $link = Link::post('http://www.montealegreluis.com', 'My blog', $readitor);
-        $link = Link::from((new LinksRepository())->add($link->information()));
+        $link = Link::from((new LinksRepository())->add($this->link->information()));
         $votes = new VotesRepository();
 
-        $vote = $votes->givenTo($link, $readitor);
+        $vote = $votes->givenTo($link, $this->readitor);
 
         $this->assertNull($vote);
     }
@@ -66,12 +80,9 @@ class VotesRepositoryTest extends TestCase
     /** @test */
     function it_should_remove_readitor_vote()
     {
-        $user = factory(User::class)->create();
-        $readitor = Readitor::with($user->id, $user->name);
-        $link = Link::post('http://www.montealegreluis.com', 'My blog', $readitor);
-        $link = Link::from((new LinksRepository())->add($link->information()));
+        $link = Link::from((new LinksRepository())->add($this->link->information()));
         $votes = new VotesRepository();
-        $votes->add($vote = Vote::upvote($link, $readitor));
+        $votes->add($vote = Vote::upvote($link, $this->readitor));
 
         $votes->remove($vote);
 

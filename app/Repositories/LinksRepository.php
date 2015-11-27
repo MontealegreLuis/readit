@@ -15,9 +15,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class LinksRepository extends Model implements Links
 {
+    public $timestamps = false;
+
     protected $table = 'links';
 
-    protected $fillable = ['url', 'title', 'votes', 'readitor_id'];
+    protected $fillable = ['url', 'title', 'votes', 'posted_at', 'readitor_id'];
 
     /**
      * @param LinkInformation $link
@@ -29,6 +31,7 @@ class LinksRepository extends Model implements Links
             'url' => $link->url(),
             'title' => $link->title(),
             'votes' => $link->votes(),
+            'posted_at' => $link->timestamp(),
             'readitor_id' => $link->readitor()->id(),
         ]);
         $information = $linkInformation->toArray();
@@ -90,6 +93,7 @@ class LinksRepository extends Model implements Links
                 'links.url',
                 'links.title',
                 'links.votes',
+                'links.posted_at',
                 'users.id as readitor_id',
                 'users.name',
             ])

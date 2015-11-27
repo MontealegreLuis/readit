@@ -7,6 +7,7 @@
 namespace App\Http\Controllers;
 
 use CodeUp\ReadIt\Links\Links;
+use Illuminate\Http\Request;
 
 class ViewLinksAction extends Controller
 {
@@ -24,10 +25,14 @@ class ViewLinksAction extends Controller
     /**
      * Show all the posted links, the ones with more votes are shown first
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show()
+    public function show(Request $request)
     {
-        return view('links.index', ['links' => $this->links->orderedByVotes()]);
+        return view('links.index', [
+            'links' => $this->links->orderedByVotes(),
+            'current' => $request->server('REQUEST_TIME'),
+        ]);
     }
 }

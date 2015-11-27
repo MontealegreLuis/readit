@@ -13,6 +13,7 @@ use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\UnknownLink;
 use CodeUp\ReadIt\Links\Vote;
 use CodeUp\ReadIt\Links\Votes;
+use DateTime;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -33,6 +34,7 @@ abstract class VoteLinkSpec extends ObjectBehavior
             'votes' => 10,
             'url' => 'http://www.montealegreluis.com',
             'title' => 'My blog',
+            'timestamp' => DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp(),
         ]));
     }
 

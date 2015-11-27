@@ -8,6 +8,7 @@ namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Readitor;
+use DateTime;
 use PhpSpec\ObjectBehavior;
 
 class VoteSpec extends ObjectBehavior
@@ -24,7 +25,8 @@ class VoteSpec extends ObjectBehavior
         $this->link = Link::post(
             'http://www.montealegreluis.com',
             'My blog',
-            $this->readitor
+            $this->readitor,
+            DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
         );
     }
 

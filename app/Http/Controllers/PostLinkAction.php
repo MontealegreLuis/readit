@@ -29,7 +29,11 @@ class PostLinkAction extends Controller
     public function store(PostLinkRequest $request, Links $links)
     {
         $readitor = Readitor::with(Auth::user()->id, Auth::user()->name);
-        $link = $readitor->post($request->get('url'), $request->get('title'));
+        $link = $readitor->post(
+            $request->get('url'),
+            $request->get('title'),
+            $request->server('REQUEST_TIME')
+        );
         $links->add($link->information());
 
         return redirect('/');

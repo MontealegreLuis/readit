@@ -10,6 +10,7 @@ use App\User;
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Readitor;
+use DateTime;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -26,7 +27,8 @@ class LinksRepositoryTest extends TestCase
         $link = Link::post(
             'http://www.montealegreluis.com',
             'My Blog',
-            Readitor::with($user->id, $user->name)
+            Readitor::with($user->id, $user->name),
+            DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
         );
         $links = new LinksRepository();
 
@@ -36,7 +38,8 @@ class LinksRepositoryTest extends TestCase
             'url' => 'http://www.montealegreluis.com',
             'title' => 'My Blog',
             'votes' => 0,
-            'readitor_id' => $user->id
+            'readitor_id' => $user->id,
+            'posted_at' => 1448630402,
         ]);
     }
 
@@ -107,6 +110,7 @@ class LinksRepositoryTest extends TestCase
             'votes' => $votes,
             'readitor_id' => $user->id,
             'name' => $user->name,
+            'posted_at' => DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
         ]);
     }
 }

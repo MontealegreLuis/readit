@@ -32,6 +32,7 @@ $factory->define(LinkInformation::class, function (Faker\Generator $faker) {
         'votes' => $faker->numberBetween(1, 1800),
         'readitor_id' => $user->id,
         'name' => $user->name,
+        'posted_at' => DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
     ];
 });
 

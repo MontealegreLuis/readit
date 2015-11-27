@@ -23,6 +23,9 @@ class LinkInformation
     private $url;
 
     /** @var int */
+    private $timestamp;
+
+    /** @var int */
     private $votes;
 
     /** @var  ReaditorInformation */
@@ -36,6 +39,7 @@ class LinkInformation
         isset($information['id']) && $this->id = $information['id'];
         isset($information['title']) && $this->title = $information['title'];
         isset($information['url']) && $this->url = HttpUri::createFromString($information['url']);
+        isset($information['posted_at']) && $this->timestamp = $information['posted_at'];
         isset($information['votes']) && $this->votes = $information['votes'];
         $this->readitor = new ReaditorInformation($information);
     }
@@ -71,6 +75,24 @@ class LinkInformation
     {
         return $this->url;
     }
+
+    /**
+     * @return int
+     */
+    public function timestamp()
+    {
+        return $this->timestamp;
+    }
+
+    /**
+     * @param int $current
+     * @return int
+     */
+    public function days($current)
+    {
+        return round(($current - $this->timestamp) / (24 * 60 * 60));
+    }
+
 
     /**
      * @return ReaditorInformation

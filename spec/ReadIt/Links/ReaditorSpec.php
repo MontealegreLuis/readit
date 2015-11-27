@@ -8,6 +8,7 @@ namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\Vote;
+use DateTime;
 use PhpSpec\ObjectBehavior;
 
 class ReaditorSpec extends ObjectBehavior
@@ -33,7 +34,11 @@ class ReaditorSpec extends ObjectBehavior
 
     function it_should_post_a_link()
     {
-        $link = $this->post('http://www.montealegreluis.com', 'My blog');
+        $link = $this->post(
+            'http://www.montealegreluis.com',
+            'My blog',
+            DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp()
+        );
         $link->information()->url()->__toString()->shouldBe('http://www.montealegreluis.com');
         $link->information()->title()->shouldBe('My blog');
         $link->information()->readitor()->name()->shouldBe('Luis Montealegre');

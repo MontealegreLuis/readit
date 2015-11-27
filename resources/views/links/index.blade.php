@@ -25,7 +25,10 @@
                     <small class="text-muted">({{ $link->url()->getHost() }})</small>
                 </p>
                 <p>
-                    <span class="text-muted">Sent by</span> {{ $link->readitor()->name() }}
+                    <span class="text-muted">Sent</span>
+                    {{ $link->days($current) }}
+                    <span class="text-muted">days ago by</span>
+                    {{ $link->readitor()->name() }}
                 </p>
             </div>
         </div>

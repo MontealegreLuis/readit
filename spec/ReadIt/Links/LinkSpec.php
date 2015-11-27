@@ -8,6 +8,7 @@ namespace spec\CodeUp\ReadIt\Links;
 
 use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\Vote;
+use DateTime;
 use InvalidArgumentException;
 use PhpSpec\ObjectBehavior;
 
@@ -16,13 +17,18 @@ class LinkSpec extends ObjectBehavior
     /** @var Readitor */
     private $readitor;
 
+    /** @var int */
+    private $timestamp;
+
     function let()
     {
         $this->readitor = Readitor::with(1, 'Luis Montealegre');
+        $this->timestamp = DateTime::createFromFormat('Y-m-d H:i:s', '2015-11-27 13:20:02')->getTimestamp();
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
             'My blog',
-            $this->readitor
+            $this->readitor,
+            $this->timestamp,
         ]);
     }
 
@@ -32,6 +38,7 @@ class LinkSpec extends ObjectBehavior
             $invalidURL = 'ftp://www.montealegreluis.com',
             'My blog',
             $readitor,
+            $this->timestamp
         ]);
         $this
             ->shouldThrow(InvalidArgumentException::class)
@@ -44,7 +51,8 @@ class LinkSpec extends ObjectBehavior
         $this->beConstructedThrough('post', [
             'http://www.montealegreluis.com',
             $invalidTitle = '',
-            $readitor
+            $readitor,
+            $this->timestamp
         ]);
         $this
             ->shouldThrow(InvalidArgumentException::class)

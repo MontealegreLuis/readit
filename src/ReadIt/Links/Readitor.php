@@ -69,11 +69,12 @@ class Readitor
     /**
      * @param string $url
      * @param string $title
+     * @param int $timestamp
      * @return Link
      */
-    public function post($url, $title)
+    public function post($url, $title, $timestamp)
     {
-        return Link::post($url, $title, $this);
+        return Link::post($url, $title, $this, $timestamp);
     }
 
     /**

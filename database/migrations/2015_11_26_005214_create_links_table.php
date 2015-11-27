@@ -21,8 +21,7 @@ class CreateLinksTable extends Migration
             $table->string('url');
             $table->string('title');
             $table->integer('votes');
-            $table->timestamp('decayed_since');
-            $table->timestamps();
+            $table->integer('posted_at')->unsigned();
             $table->integer('readitor_id')->unsigned();
             $table
                 ->foreign('readitor_id')
