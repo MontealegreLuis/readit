@@ -11,6 +11,7 @@ use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\ReaditorInformation;
 use CodeUp\ReadIt\Links\UnknownLink;
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class LinksRepository extends Model implements Links
@@ -48,7 +49,7 @@ class LinksRepository extends Model implements Links
      */
     public function withId($id)
     {
-        $link = $this->getReaditorQueryBuilder()
+        $link = $this->getLinksQueryBuilder()
             ->where('links.id', '=', $id)
             ->first()
         ;
@@ -61,11 +62,19 @@ class LinksRepository extends Model implements Links
     }
 
     /**
-     * @return LinkInformation[]
+     * Subtract a vote for every 5 minutes since the link was posted
+     *
+     * @param int $since
+     * @return \CodeUp\ReadIt\Links\LinkInformation[]
      */
-    public function orderedByVotes()
+    public function orderedByVotes($since)
     {
-        $links = $this->getReaditorQueryBuilder()->get();
+        $links = $this->getLinksQueryBuilder()
+            ->addSelect(DB::raw("links.votes - ROUND((({$since} - links.posted_at) / (60 * 5))) AS rank"))
+            ->orderBy('rank', 'desc')
+            ->orderBy('posted_at', 'desc')
+            ->get()
+        ;
 
         return array_map([$this, 'hydrateLink'], $links);
     }
@@ -83,7 +92,7 @@ class LinksRepository extends Model implements Links
     /**
      * @return \Illuminate\Database\Query\Builder
      */
-    private function getReaditorQueryBuilder()
+    private function getLinksQueryBuilder()
     {
         return $this
             ->query()
@@ -94,10 +103,9 @@ class LinksRepository extends Model implements Links
                 'links.title',
                 'links.votes',
                 'links.posted_at',
-                'users.id as readitor_id',
+                'users.id AS readitor_id',
                 'users.name',
             ])
-            ->orderBy('votes', 'desc')
             ->join('users', 'users.id', '=', 'links.readitor_id')
         ;
     }
@@ -108,8 +116,6 @@ class LinksRepository extends Model implements Links
      */
     private function hydrateLink(array $information)
     {
-        $information['readitor'] = new ReaditorInformation($information);
-
         return new LinkInformation($information);
     }
 }

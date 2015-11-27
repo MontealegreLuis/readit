@@ -30,9 +30,11 @@ class ViewLinksAction extends Controller
      */
     public function show(Request $request)
     {
+        $current = $request->server('REQUEST_TIME');
+
         return view('links.index', [
-            'links' => $this->links->orderedByVotes(),
-            'current' => $request->server('REQUEST_TIME'),
+            'links' => $this->links->orderedByVotes($current),
+            'current' => $current,
         ]);
     }
 }

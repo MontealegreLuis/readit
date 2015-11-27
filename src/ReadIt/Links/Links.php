@@ -30,7 +30,8 @@ interface Links
     public function withId($id);
 
     /**
+     * @param int $since
      * @return LinkInformation[]
      */
-    public function orderedByVotes();
+    public function orderedByVotes($since);
 }
