@@ -6,11 +6,14 @@
  */
 namespace App\Providers;
 
+use App\Http\Controllers\VoteLinkAction;
 use App\Repositories\LinksRepository;
 use App\Repositories\VotesRepository;
 use Auth;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\Votes;
+use CodeUp\ReadIt\Readitors\DownvoteLink;
+use CodeUp\ReadIt\Readitors\UpvoteLink;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\View;
 
@@ -37,5 +40,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Links::class, LinksRepository::class);
         $this->app->bind(Votes::class, VotesRepository::class);
+        $this->app->bind('\App\Http\Controllers\UpvoteLinkAction', function() {
+            return new VoteLinkAction($this->app->make(UpvoteLink::class));
+        });
+        $this->app->bind('\App\Http\Controllers\DownvoteLinkAction', function() {
+            return new VoteLinkAction($this->app->make(DownvoteLink::class));
+        });
     }
 }

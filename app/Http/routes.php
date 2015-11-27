@@ -14,7 +14,8 @@
 Route::get('/', 'ViewLinksAction@show');
 Route::get('/links/create', 'PostLinkAction@create');
 Route::post('/links/store', 'PostLinkAction@store');
-Route::get('/links/upvote/{id}', 'UpvoteLinkAction@upvote');
+Route::get('/links/upvote/{id}', 'UpvoteLinkAction@vote');
+Route::get('/links/downvote/{id}', 'DownvoteLinkAction@vote');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',

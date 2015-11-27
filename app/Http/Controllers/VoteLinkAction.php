@@ -7,33 +7,32 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\UnknownLink;
-use CodeUp\ReadIt\Readitors\UpvoteLink;
+use CodeUp\ReadIt\Readitors\VoteLink;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class UpvoteLinkAction extends Controller
+class VoteLinkAction extends Controller
 {
-    /** @var Links */
+    /** @var VoteLink */
     private $action;
 
     /**
-     * @param UpvoteLink $upvoteLink
+     * @param VoteLink $voteLink
      */
-    public function __construct(UpvoteLink $upvoteLink)
+    public function __construct(VoteLink $voteLink)
     {
-        $this->action = $upvoteLink;
+        $this->action = $voteLink;
     }
 
     /**
      * @param int $linkId
      * @return \CodeUp\ReadIt\Links\LinkInformation
      */
-    public function upvote($linkId)
+    public function vote($linkId)
     {
         try {
-            $link = $this->action->upvote(
+            $link = $this->action->vote(
                 $linkId,
                 Readitor::with(Auth::user()->id, Auth::user()->name)
             );
