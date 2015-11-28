@@ -93,6 +93,7 @@ class LinksRepository extends Model implements Links
         $links = $builder
             ->addSelect(DB::raw("links.votes - ROUND((({$since} - links.posted_at) / (60 * 5))) AS rank"))
             ->orderBy('rank', 'desc')
+            ->orderBy('votes', 'desc')
             ->orderBy('posted_at', 'desc')
             ->get()
         ;
