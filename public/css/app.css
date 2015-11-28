@@ -12,6 +12,20 @@ form > div {
     font-weight: bold;
 }
 
+.vote:link,
+.vote:visited,
+.vote:hover
+.vote:active {
+    color: #B0AFAB;
+}
+
+.link-voted:link,
+.link-voted:visited,
+.link-voted:hover
+.link-voted:active {
+    color: #F4645F;
+}
+
 .rank {
     padding-top: 1.3em
 }

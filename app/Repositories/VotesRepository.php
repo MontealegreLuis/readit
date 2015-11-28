@@ -72,10 +72,14 @@ class VotesRepository extends Model implements Votes
     {
         $information = $vote->information();
 
-        $this->update([
-            'link_id' => $information->linkId(),
-            'readitor_id' => $information->readitorId(),
-            'type' => $information->type(),
-        ]);
+        $this
+            ->query()
+            ->where('id', $vote->id())
+            ->update([
+                'link_id' => $information->linkId(),
+                'readitor_id' => $information->readitorId(),
+                'type' => $information->type(),
+            ]);
+        ;
     }
 }

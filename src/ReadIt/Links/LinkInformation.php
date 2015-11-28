@@ -31,6 +31,9 @@ class LinkInformation
     /** @var  ReaditorInformation */
     private $readitor;
 
+    /** @var Vote */
+    private $existingVote;
+
     /**
      * @param array $information
      */
@@ -41,6 +44,11 @@ class LinkInformation
         isset($information['url']) && $this->url = HttpUri::createFromString($information['url']);
         isset($information['posted_at']) && $this->timestamp = $information['posted_at'];
         isset($information['votes']) && $this->votes = $information['votes'];
+        !empty($information['current_readitor']) && $this->existingVote = Vote::from(new VoteInformation([
+            'link_id' => $information['link_id'],
+            'readitor_id' => $information['current_readitor'],
+            'type' => $information['type'],
+        ]));
         $this->readitor = new ReaditorInformation($information);
     }
 
@@ -100,5 +108,21 @@ class LinkInformation
     public function readitor()
     {
         return $this->readitor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBeenVotedByCurrentReaditor()
+    {
+        return $this->existingVote instanceof Vote;
+    }
+
+    /**
+     * @return Vote
+     */
+    public function existingVote()
+    {
+        return $this->existingVote;
     }
 }

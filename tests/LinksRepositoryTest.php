@@ -70,7 +70,7 @@ class LinksRepositoryTest extends TestCase
         // Rank = 9, link created 400 minutes ago (almost 7 hours)
         $links->add($this->getLinkWith(89, -80, $timestamp));
 
-        $orderdedLinks = $links->orderedByVotes($timestamp);
+        $orderdedLinks = $links->orderedByRank($timestamp);
 
         $this->assertEquals(100, $orderdedLinks[0]->votes());
         $this->assertEquals(1500, $orderdedLinks[1]->votes());

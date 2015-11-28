@@ -7,13 +7,21 @@
                 <p class="rank">{{ $i + 1 }}</p>
             </div>
             <div class="col-md-1 votes">
-                <a href="#" data-id="{{ $link->id() }}" class="upvote">
+                @if ($link->hasBeenVotedByCurrentReaditor() && $link->existingVote()->isPositive())
+                    <a href="#" data-id="{{ $link->id() }}" class="vote upvote link-voted">
+                @else
+                    <a href="#" data-id="{{ $link->id() }}" class="vote upvote">
+                @endif
                     <i class="glyphicon glyphicon-chevron-up"></i>
                 </a>
                 <div class="votes-count">
                     {{ $link->votes() }}
                 </div>
-                <a href="#" data-id="{{ $link->id() }}" class="downvote">
+                @if ($link->hasBeenVotedByCurrentReaditor() && $link->existingVote()->isNegative())
+                    <a href="#" data-id="{{ $link->id() }}" class="vote downvote link-voted">
+                @else
+                    <a href="#" data-id="{{ $link->id() }}" class="vote downvote">
+                @endif
                     <i class="glyphicon glyphicon-chevron-down"></i>
                 </a>
             </div>

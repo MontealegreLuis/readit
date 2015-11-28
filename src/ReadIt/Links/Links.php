@@ -31,7 +31,8 @@ interface Links
 
     /**
      * @param int $since
+     * @param Readitor $readitor Optional if user is a guest
      * @return LinkInformation[]
      */
-    public function orderedByVotes($since);
+    public function orderedByRank($since, Readitor $readitor = null);
 }

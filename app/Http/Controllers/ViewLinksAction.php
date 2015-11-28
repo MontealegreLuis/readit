@@ -6,7 +6,9 @@
  */
 namespace App\Http\Controllers;
 
+use Auth;
 use CodeUp\ReadIt\Links\Links;
+use CodeUp\ReadIt\Links\Readitor;
 use Illuminate\Http\Request;
 
 class ViewLinksAction extends Controller
@@ -31,9 +33,13 @@ class ViewLinksAction extends Controller
     public function show(Request $request)
     {
         $current = $request->server('REQUEST_TIME');
+        $readitor = null;
+        if ($user = Auth::user()) {
+            $readitor = Readitor::with($user->id, $user->name);
+        }
 
         return view('links.index', [
-            'links' => $this->links->orderedByVotes($current),
+            'links' => $this->links->orderedByRank($current, $readitor),
             'current' => $current,
         ]);
     }

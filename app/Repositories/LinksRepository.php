@@ -9,10 +9,12 @@ namespace App\Repositories;
 use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
+use CodeUp\ReadIt\Links\Readitor;
 use CodeUp\ReadIt\Links\ReaditorInformation;
 use CodeUp\ReadIt\Links\UnknownLink;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\JoinClause;
 
 class LinksRepository extends Model implements Links
 {
@@ -29,7 +31,7 @@ class LinksRepository extends Model implements Links
     public function add(LinkInformation $link)
     {
         $linkInformation = $this->create([
-            'url' => $link->url(),
+            'url' => (string) $link->url(),
             'title' => $link->title(),
             'votes' => $link->votes(),
             'posted_at' => $link->timestamp(),
@@ -65,11 +67,30 @@ class LinksRepository extends Model implements Links
      * Subtract a vote for every 5 minutes since the link was posted
      *
      * @param int $since
+     * @param Readitor $readitor Optional if user is a guest
      * @return \CodeUp\ReadIt\Links\LinkInformation[]
      */
-    public function orderedByVotes($since)
+    public function orderedByRank($since, Readitor $readitor = null)
     {
-        $links = $this->getLinksQueryBuilder()
+        $builder = $this->getLinksQueryBuilder();
+        if ($readitor) {
+            $builder
+                ->addSelect([
+                    'votes.link_id',
+                    'votes.readitor_id AS current_readitor',
+                    'votes.type'
+                ])
+                ->leftJoin('votes', function(JoinClause $join) use ($readitor) {
+                    $join
+                        ->on('votes.readitor_id', '=', 'users.id')
+                        ->on('votes.link_id', '=', 'links.id')
+                        ->on('votes.readitor_id', '=', DB::raw($readitor->id()))
+                    ;
+                })
+            ;
+        }
+
+        $links = $builder
             ->addSelect(DB::raw("links.votes - ROUND((({$since} - links.posted_at) / (60 * 5))) AS rank"))
             ->orderBy('rank', 'desc')
             ->orderBy('posted_at', 'desc')
@@ -81,12 +102,15 @@ class LinksRepository extends Model implements Links
 
     public function refresh(LinkInformation $link)
     {
-        $this->update([
-            'id' => $link->id(),
-            'title' => $link->title(),
-            'url' => $link->url(),
-            'votes' => $link->votes(),
-        ]);
+        $this
+            ->query()
+            ->where('id', $link->id())
+            ->update([
+                'title' => $link->title(),
+                'url' => (string) $link->url(),
+                'votes' => $link->votes(),
+            ]);
+        ;
     }
 
     /**
