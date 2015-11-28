@@ -5,6 +5,7 @@
     $('.upvote').on('click', function(e) {
         var url = '/links/upvote/{id}'.replace('{id}', $(this).data('id'));
         var $link = $(this);
+        var hasBeenVoted = $link.hasClass('link-voted');
         var $vote = $link.parent();
         var $downvote = $vote.find('.downvote');
         var $votes = $(this).parent().find('.votes-count');
@@ -14,8 +15,12 @@
             dataType: 'json',
             success: function(link) {
                 $votes.text(link.votes);
-                $link.addClass('link-voted');
                 $downvote.removeClass('link-voted');
+                if (hasBeenVoted) {
+                    $link.removeClass('link-voted');
+                } else {
+                    $link.addClass('link-voted');
+                }
             }
         });
     });
@@ -23,6 +28,7 @@
     $('.downvote').on('click', function(e) {
         var url = '/links/downvote/{id}'.replace('{id}', $(this).data('id'));
         var $link = $(this);
+        var hasBeenVoted = $link.hasClass('link-voted');
         var $vote = $link.parent();
         var $upvote = $vote.find('.upvote');
         var $votes = $vote.find('.votes-count');
@@ -32,8 +38,12 @@
             dataType: 'json',
             success: function(link) {
                 $votes.text(link.votes);
-                $link.addClass('link-voted');
                 $upvote.removeClass('link-voted');
+                if (hasBeenVoted) {
+                    $link.removeClass('link-voted');
+                } else {
+                    $link.addClass('link-voted');
+                }
             }
         });
     });
