@@ -1,5 +1,8 @@
 # ReadIt
 
+[![Build Status](https://travis-ci.org/MontealegreLuis/readit.svg?branch=master)](https://travis-ci.org/MontealegreLuis/readit)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4/mini.png)](https://insight.sensiolabs.com/projects/b412e223-6012-472f-ad54-ba81fe85eca4)
+
 This is a lightweight clone of Reddit written in Laravel 5. It only has the
 following features:
 
@@ -42,7 +45,7 @@ global installation of Composer.
     ```bash
     $ php artisan serve
     ```
-4. Browse to http://localhost:8000/
+4. Browse to [http://localhost:8000/][1]
 
 ## Tests
 
@@ -69,3 +72,5 @@ with me.
 * Subreadits
 
 Those are the ones I can identify now.
+
+[1]: http://localhost:8000
