@@ -6,9 +6,8 @@ $connection = new PDO("mysql:host={$parameters[2]}", $parameters[0], $parameters
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 ]);
 
-$connection->exec("DROP DATABASE IF EXISTS {$parameters[3]}");
 $sql = <<<DATABASE
-CREATE DATABASE reddit_codeup
+CREATE DATABASE IF NOT EXISTS {$parameters[3]}
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci
 DATABASE;

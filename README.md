@@ -49,6 +49,21 @@ global installation of Composer.
 
 ## Tests
 
+### Configure
+
+In order to run the tests you should create a database with the following
+command. And run the migrations for that database.
+
+```bash
+make database RUSER="root" RPSWD="root" HOST="localhost" DB="homestead_test" USER="homestead" PSWD="secret"
+php artisan migrate --database="testing"
+```
+
+`RUSER` and `RPSWD` are the credentials of a user with permissions to create
+databases and users. This configuration is also used by Travis.
+
+### Execute
+
 Features are described using phpspec and there are some integration tests with
 PHPUnit.
 
@@ -57,7 +72,7 @@ $ bin/phpspec run
 $ bin/phpunit --testdox
 ```
 
-### TODOs
+## TODOs
 
 There is room for improvement. This is my first Laravel application, so bear
 with me.
