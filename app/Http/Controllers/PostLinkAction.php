@@ -14,6 +14,15 @@ use CodeUp\ReadIt\Links\Readitor;
 class PostLinkAction extends Controller
 {
     /**
+     * Guest users cannot post a link to the site
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * PHP version 5.6
+ *
+ * This source file is subject to the license that is bundled with this package in the file LICENSE.
+ */
 namespace App\Http\Middleware;
 
 use Closure;
@@ -18,7 +22,6 @@ class Authenticate
      * Create a new filter instance.
      *
      * @param  Guard  $auth
-     * @return void
      */
     public function __construct(Guard $auth)
     {

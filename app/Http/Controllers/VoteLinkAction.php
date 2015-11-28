@@ -18,11 +18,14 @@ class VoteLinkAction extends Controller
     private $action;
 
     /**
+     * Guest users cannot vote for links
+     *
      * @param VoteLink $voteLink
      */
     public function __construct(VoteLink $voteLink)
     {
         $this->action = $voteLink;
+        $this->middleware('auth');
     }
 
     /**
