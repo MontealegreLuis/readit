@@ -10,7 +10,6 @@ use CodeUp\ReadIt\Links\Link;
 use CodeUp\ReadIt\Links\LinkInformation;
 use CodeUp\ReadIt\Links\Links;
 use CodeUp\ReadIt\Links\Readitor;
-use CodeUp\ReadIt\Links\ReaditorInformation;
 use CodeUp\ReadIt\Links\UnknownLink;
 use DB;
 use Illuminate\Database\Eloquent\Model;
@@ -37,11 +36,8 @@ class LinksRepository extends Model implements Links
             'posted_at' => $link->timestamp(),
             'readitor_id' => $link->readitor()->id(),
         ]);
-        $information = $linkInformation->toArray();
-        $information['name'] = $link->readitor()->name();
-        $information['readitor'] = new ReaditorInformation($information);
 
-        return new LinkInformation($information);
+        return new LinkInformation($linkInformation->toArray());
     }
 
     /**
